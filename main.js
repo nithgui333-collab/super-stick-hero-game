@@ -64,20 +64,42 @@ function generatePlatform() {
     }
 }
 
-// Event: Mouse down starts stretching the stick upwards
-window.addEventListener("mousedown", () => {
+// --- Shared Control Functions for both Mouse and Touch ---
+
+// Starts stretching the stick upwards
+function handleActionStart() {
     if (phase === "waiting") {
         phase = "stretching";
         introElement.style.opacity = 0;
     }
-});
+}
 
-// Event: Mouse up stops stretching and triggers the stick rotation
-window.addEventListener("mouseup", () => {
+// Stops stretching and triggers the stick rotation
+function handleActionEnd() {
     if (phase === "stretching") {
         phase = "turning";
     }
-});
+}
+
+// --- Computer Controls (Mouse Events) ---
+window.addEventListener("mousedown", handleActionStart);
+window.addEventListener("mouseup", handleActionEnd);
+
+// --- Mobile Controls (Touch Events) ---
+window.addEventListener("touchstart", (e) => {
+    // Prevent default behaviors like scrolling or zooming while pressing the game screen
+    if (e.target === canvas || e.target === document.body) {
+        e.preventDefault();
+    }
+    handleActionStart();
+}, { passive: false });
+
+window.addEventListener("touchend", (e) => {
+    if (e.target === canvas || e.target === document.body) {
+        e.preventDefault();
+    }
+    handleActionEnd();
+}, { passive: false });
 
 // Event: Restart button click resets the game state
 restartButton.addEventListener("click", (e) => {
@@ -151,10 +173,8 @@ function gameLoop() {
 
 // Draw graphics on the HTML5 Canvas
 function draw() {
-    // ប្រើ ctx.clearRect ដើម្បីលុបគំនូរចាស់ចោល ប៉ុន្តែវានៅតែរក្សាភាពថ្លា (Transparent) អាចមើលធ្លុះទៅឃើញរូប BG ក្នុង CSS
+    // Use clearRect to keep the canvas transparent so the CSS background image shows through
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
-    
-    /* === លុបកូដគូរភ្នំ Background ពណ៌បៃតងចាស់ចេញទាំងស្រុង === */
 
     // Draw solid black platforms
     platforms.forEach((platform) => {

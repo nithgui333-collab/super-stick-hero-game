@@ -11,18 +11,23 @@ body {
 }
 
 .container {
-  position: relative;
-  width: 375px;
-  height: 375px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-  overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 375px; 
+    height: 100vh;    
+    max-height: 375px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border-radius: 4px;
+    overflow: hidden;
 }
+
 #game {
-    background-image: url('./img/background.jpg'); 
+    background-image: url('img/background.jpg'); 
     background-size: cover;
     background-position: center;
     display: block;
+    width: 100%;  
+    height: 100%; 
 }
 
 
